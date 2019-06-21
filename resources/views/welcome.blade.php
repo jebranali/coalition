@@ -12,7 +12,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <form>
+                    <form method="post" action="{{url('/product')}}">
+                        @csrf
                         <div class="form-group">
                             <label for="product_name">Product Name</label>
                             <input type="text" class="form-control" id="product_name" name="product_name" placeholder="Product Name">
