@@ -12,8 +12,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <form method="post" action="{{url('/product')}}">
-                        @csrf
+                    <form id="product_form">
+                        {{csrf_field()}}
                         <div class="form-group">
                             <label for="product_name">Product Name</label>
                             <input type="text" class="form-control" id="product_name" name="product_name" placeholder="Product Name">
@@ -33,3 +33,14 @@
         </div>
     </body>
 </html>
+<script>
+    //product data submit logic
+    $(document).on('submit', '#product_form', function (e) {
+        e.preventDefault();
+        $.post('{{url('product')}}', $(this).serialize(), function (r) {
+            if(r === 'ok'){
+                alert('Data submitted successfully');
+            }
+        })
+    })
+</script>
