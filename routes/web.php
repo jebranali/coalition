@@ -13,3 +13,4 @@
 
 Route::get('/', 'HomeController@index');
 Route::post('/product', 'HomeController@product');
+Route::get('/products', 'HomeController@products');

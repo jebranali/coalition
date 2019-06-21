@@ -16,18 +16,24 @@
                         {{csrf_field()}}
                         <div class="form-group">
                             <label for="product_name">Product Name</label>
-                            <input type="text" class="form-control" id="product_name" name="product_name" placeholder="Product Name">
+                            <input type="text" required class="form-control" id="product_name" name="product_name" placeholder="Product Name">
                         </div>
                         <div class="form-group">
                             <label for="quantity">Quantity</label>
-                            <input type="number" min="1" class="form-control" id="quantity" name="quantity" placeholder="Quantity in Stock">
+                            <input type="number" required min="1" class="form-control" id="quantity" name="quantity" placeholder="Quantity in Stock">
                         </div>
                         <div class="form-group">
                             <label for="price">Price</label>
-                            <input type="number" min="1" class="form-control" id="price" name="price" placeholder="Price per item">
+                            <input type="number" required min="1" class="form-control" id="price" name="price" placeholder="Price per item">
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12" id="t_container">
                 </div>
             </div>
         </div>
@@ -37,10 +43,15 @@
     //product data submit logic
     $(document).on('submit', '#product_form', function (e) {
         e.preventDefault();
-        $.post('{{url('product')}}', $(this).serialize(), function (r) {
-            if(r === 'ok'){
-                alert('Data submitted successfully');
-            }
-        })
+        $.post('{{url('product')}}', $(this).serialize(), function (data) {
+            $('#t_container').html(data);
+        });
+    });
+
+    //get products
+    $(document).ready(function () {
+        $.get('{{url('products')}}', function (data) {
+            $('#t_container').html(data);
+        });
     })
 </script>

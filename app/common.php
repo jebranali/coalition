@@ -14,7 +14,7 @@ function add_products($request)
 
     $data = $request->only(['product_name', 'quantity', 'price']);
 
-    $data['created_at'] = Carbon::now();
+    $data['created_at'] = Carbon::now()->toDateString();
 
     array_push($products, $data);
 
@@ -22,13 +22,22 @@ function add_products($request)
 }
 
 /**
- * @return array|mixed
+ * @param bool $collection
+ * @return array|\Illuminate\Support\Collection|mixed
  * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
  */
-function get_existing_products()
+function get_existing_products($collection = false)
 {
-    return Storage::disk('local')->exists('products.json')
+    $products = Storage::disk('local')->exists('products.json')
         ? json_decode(Storage::disk('local')->get('products.json')) : [];
+
+    if($collection){
+        return collect($products)->sortByDesc(function ($obj, $key) {
+            return Carbon::parse($obj->created_at)->timestamp;
+        });
+    }
+
+    return $products;
 }
 
 /**
@@ -39,5 +48,5 @@ function save_products($products)
 {
     Storage::disk('local')->put('products.json', json_encode($products, JSON_PRETTY_PRINT));
 
-    return 'ok';
+    return get_existing_products(true);
 }
